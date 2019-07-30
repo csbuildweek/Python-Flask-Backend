@@ -16,6 +16,7 @@ MONGO_PW1 = os.getenv('MONGO_PW1')
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
+
 myclient = pymongo.MongoClient(
     f"mongodb+srv://{MONGO_USER1}:{MONGO_PW1}@treasureseeker-b4iam.mongodb.net/test?retryWrites=true&w=majority")
 
