@@ -71,34 +71,194 @@ def move_player():
     # send request to lambda server with direction
     direction = request.get_json()['direction']
     print("DIRECTION: ", direction)
-    if direction in ['n','e','w','s']:
+    if direction in ['n', 'e', 'w', 's']:
         API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/'
         headers = {
             "Authorization": f'token {TOKEN1}'
         }
         data = {'direction': direction}
         print('DATAAAAAAAAA: ', data)
-        r = requests.post(url = API_ENDPOINT, json=data, headers=headers)
+        r = requests.post(url=API_ENDPOINT, json=data, headers=headers)
         returned_data = json.loads(r.text)
         print(returned_data)
         # if response is good send info to frontend
         response = {
             "data": returned_data,
-            "message": "GOOD JOB!!! YOU DID THINGS!!!"
         }
 
         return jsonify(response), 200
     else:
-        response = {"message": "YOU SUCK"}
+        response = {"message": "Error"}
         return jsonify(response), 400
 
-# Players ---------------------------------------------------
 
+# @app.route('/take')
+@app.route('/take', methods=["POST"])
+def take_item():
+    name = request.get_json()['name']
+    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/take/'
+    headers = {
+        "Authorization": f'token {TOKEN1}'
+    }
+    data = {'name': name}
+    print('Name: ', data)
+    r = requests.post(url=API_ENDPOINT, json=data, headers=headers)
+    returned_data = json.loads(r.text)
+    print(returned_data)
+    # if response is good send info to frontend
+    response = {
+        "data": returned_data,
+    }
+
+    return jsonify(response), 200
+
+# @app.route('/drop')
+@app.route('/take', methods=["POST"])
+def drop_item():
+    name = request.get_json()['name']
+    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/drop/'
+    headers = {
+        "Authorization": f'token {TOKEN1}'
+    }
+    data = {'name': name}
+    print('Name: ', data)
+    r = requests.post(url=API_ENDPOINT, json=data, headers=headers)
+    returned_data = json.loads(r.text)
+    print(returned_data)
+    # if response is good send info to frontend
+    response = {
+        "data": returned_data,
+    }
+
+    return jsonify(response), 200
+
+# @app.route('/sell')
+@app.route('/sell', methods=["POST"])
+def sell_item():
+    name = request.get_json()['name']
+    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/sell/'
+    headers = {
+        "Authorization": f'token {TOKEN1}'
+    }
+    data = {'name': name, "confirm": "yes"}
+    print('Name: ', data)
+    r = requests.post(url=API_ENDPOINT, json=data, headers=headers)
+    returned_data = json.loads(r.text)
+    print(returned_data)
+    # if response is good send info to frontend
+    response = {
+        "data": returned_data,
+    }
+
+    return jsonify(response), 200
+
+# @app.route('/status')
+@app.route('/status', methods=["POST"])
+def check_status():
+    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/status/'
+    headers = {
+        "Authorization": f'token {TOKEN1}'
+    }
+
+    r = requests.post(url=API_ENDPOINT, headers=headers)
+    returned_data = json.loads(r.text)
+    print(returned_data)
+    # if response is good send info to frontend
+    response = {
+        "data": returned_data,
+    }
+
+    return jsonify(response), 200
+
+# @app.route('/examine')
+@app.route('/examine', methods=["POST"])
+def examine():
+    name = request.get_json()['name']
+    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/examine/'
+    headers = {
+        "Authorization": f'token {TOKEN1}'
+    }
+    data = {'name': name}
+    print('Name: ', data)
+    r = requests.post(url=API_ENDPOINT, json=data, headers=headers)
+    returned_data = json.loads(r.text)
+    print(returned_data)
+    # if response is good send info to frontend
+    response = {
+        "data": returned_data,
+    }
+
+    return jsonify(response), 200
+
+# @app.route('/change_name')
+@app.route('/change_name', methods=["POST"])
+def name_change():
+    name = request.get_json()['name']
+    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/change_name/'
+    headers = {
+        "Authorization": f'token {TOKEN1}'
+    }
+    data = {'name': name}
+    print('Name: ', data)
+    r = requests.post(url=API_ENDPOINT, json=data, headers=headers)
+    returned_data = json.loads(r.text)
+    print(returned_data)
+    # if response is good send info to frontend
+    response = {
+        "data": returned_data,
+    }
+
+    return jsonify(response), 200
+
+# @app.route('/pray')
+@app.route('/pray', methods=["POST"])
+def pray():
+    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/'
+    headers = {
+        "Authorization": f'token {TOKEN1}'
+    }
+    r = requests.post(url=API_ENDPOINT, headers=headers)
+    returned_data = json.loads(r.text)
+    print(returned_data)
+    # if response is good send info to frontend
+    response = {
+        "data": returned_data,
+    }
+
+    return jsonify(response), 200
+
+
+# @app.route('/fly')
+@app.route('/fly', methods=["POST"])
+def fly():
+    # send request to lambda server with direction
+    direction = request.get_json()['direction']
+    print("DIRECTION: ", direction)
+    if direction in ['n', 'e', 'w', 's']:
+        API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/fly/'
+        headers = {
+            "Authorization": f'token {TOKEN1}'
+        }
+        data = {'direction': direction}
+        print('DATAAAAAAAAA: ', data)
+        r = requests.post(url=API_ENDPOINT, json=data, headers=headers)
+        returned_data = json.loads(r.text)
+        print(returned_data)
+        # if response is good send info to frontend
+        response = {
+            "data": returned_data,
+        }
+
+        return jsonify(response), 200
+    else:
+        response = {"message": "Error"}
+        return jsonify(response), 400
+
+
+# Players ---------------------------------------------------
 # @app.route('/players', methods=['POST'])
 # def add_income():
 #   incomes.append(request.get_json())
 #   return '', 204
-
-
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
