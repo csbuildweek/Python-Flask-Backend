@@ -113,7 +113,7 @@ def take_item():
     return jsonify(response), 200
 
 # @app.route('/drop')
-@app.route('/take', methods=["POST"])
+@app.route('/drop', methods=["POST"])
 def drop_item():
     name = request.get_json()['name']
     API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/drop/'
