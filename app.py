@@ -3,7 +3,7 @@ import json
 import requests
 import os
 from flask import Flask, jsonify, request
-
+from flask_cors import CORS
 
 # .ENV
 from dotenv import load_dotenv
@@ -14,6 +14,7 @@ MONGO_USER1 = os.getenv('MONGO_USER1')
 MONGO_PW1 = os.getenv('MONGO_PW1')
 
 app = Flask(__name__)
+CORS(app)
 
 myclient = pymongo.MongoClient(
     f"mongodb+srv://{MONGO_USER1}:{MONGO_PW1}@treasureseeker-b4iam.mongodb.net/test?retryWrites=true&w=majority")
