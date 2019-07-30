@@ -38,22 +38,22 @@ collist = mydb.list_collection_names()
 if "map" in collist:
     print("The collection exists.")
 
-map = [
-    {
-        0: {
-            "room_id": 0,
-            "title": "Room 0",
-            "description": "You are standing in an empty room.",
-            "coordinates": "(60,60)",
-            "players": [],
-            "items": ["small treasure"],
-            "exits": ["n", "s", "e", "w"],
-            "cooldown": 60.0,
-            "errors": [],
-            "messages": []
-        }
-    }
-]
+# map = [
+#     {
+#         0: {
+#             "room_id": 0,
+#             "title": "Room 0",
+#             "description": "You are standing in an empty room.",
+#             "coordinates": "(60,60)",
+#             "players": [],
+#             "items": ["small treasure"],
+#             "exits": ["n", "s", "e", "w"],
+#             "cooldown": 60.0,
+#             "errors": [],
+#             "messages": []
+#         }
+#     }
+# ]
 
 # Map ---------------------------------------------------
 @app.route("/", methods=['GET'])
