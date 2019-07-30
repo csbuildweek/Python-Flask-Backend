@@ -15,9 +15,8 @@ MONGO_USER1 = os.getenv('MONGO_USER1')
 MONGO_PW1 = os.getenv('MONGO_PW1')
 
 app = Flask(__name__)
+# Added cors
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
-
 
 
 myclient = pymongo.MongoClient(
