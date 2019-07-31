@@ -29,6 +29,7 @@ class Player:
 
 # CREATE PLAYER
 player1 = Player(TOKEN1, MONGO_USER1, MONGO_PW1)
+player1.graph.initialize()
 
 # ======== MongoDB Setup ========= #
 myclient = pymongo.MongoClient(
