@@ -83,9 +83,9 @@ def move_player():
         # Send room data to graph
         player1.graph.update_map(room, direction)
         # if response is good send info to frontend
+        room['adjacent_rooms'] = player1.graph.current_room.exits
         response = {
             "data": room,
-            "exits": player1.graph.current_room.exits
         }
         return jsonify(response), 200
     else:
