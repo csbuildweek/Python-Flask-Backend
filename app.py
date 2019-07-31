@@ -85,6 +85,7 @@ def move_player():
         # if response is good send info to frontend
         response = {
             "data": room,
+            "exits": player1.graph.current_room.exits
         }
         return jsonify(response), 200
     else:
