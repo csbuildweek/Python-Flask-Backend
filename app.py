@@ -112,7 +112,7 @@ def take_item():
 
     return jsonify(response), 200
 
-# @app.route('/drop')
+# @app.route('/drop')====================================================================
 @app.route('/drop', methods=["POST"])
 def drop_item():
     name = request.get_json()['name']
@@ -132,7 +132,7 @@ def drop_item():
 
     return jsonify(response), 200
 
-# @app.route('/sell')
+# @app.route('/sell')====================================================================
 @app.route('/sell', methods=["POST"])
 def sell_item():
     name = request.get_json()['name']
@@ -152,7 +152,7 @@ def sell_item():
 
     return jsonify(response), 200
 
-# @app.route('/status')
+# @app.route('/status')====================================================================
 @app.route('/status', methods=["POST"])
 def check_status():
     API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/status/'
@@ -170,7 +170,7 @@ def check_status():
 
     return jsonify(response), 200
 
-# @app.route('/examine')
+# @app.route('/examine')====================================================================
 @app.route('/examine', methods=["POST"])
 def examine():
     name = request.get_json()['name']
@@ -190,7 +190,7 @@ def examine():
 
     return jsonify(response), 200
 
-# @app.route('/change_name')
+# @app.route('/change_name')====================================================================
 @app.route('/change_name', methods=["POST"])
 def name_change():
     name = request.get_json()['name']
@@ -210,7 +210,7 @@ def name_change():
 
     return jsonify(response), 200
 
-# @app.route('/pray')
+# @app.route('/pray')====================================================================
 @app.route('/pray', methods=["POST"])
 def pray():
     API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/'
@@ -228,7 +228,7 @@ def pray():
     return jsonify(response), 200
 
 
-# @app.route('/fly')
+# @app.route('/fly')====================================================================
 @app.route('/fly', methods=["POST"])
 def fly():
     # send request to lambda server with direction
@@ -255,10 +255,13 @@ def fly():
         return jsonify(response), 400
 
 
-# Players ---------------------------------------------------
+# Players====================================================================
+
 # @app.route('/players', methods=['POST'])
 # def add_income():
 #   incomes.append(request.get_json())
 #   return '', 204
+
+
 if __name__ == "__main__":
     app.run(debug=True)
