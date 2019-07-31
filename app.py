@@ -4,7 +4,7 @@ import requests
 import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
+from graph import Graph
 
 # .ENV
 from dotenv import load_dotenv
@@ -17,48 +17,44 @@ MONGO_PW1 = os.getenv('MONGO_PW1')
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
+class Player:
+    def __init__(self, token, user, pw):
+        self.items = []
+        self.cooldown = 0
+        self.name = ''
+        self.token = token
+        self.user = user
+        self.pw = pw
+        self.graph = Graph()
+
+# CREATE PLAYER
+player1 = Player(TOKEN1, MONGO_USER1, MONGO_PW1)
+
+# ======== MongoDB Setup ========= #
 myclient = pymongo.MongoClient(
     f"mongodb+srv://{MONGO_USER1}:{MONGO_PW1}@treasureseeker-b4iam.mongodb.net/test?retryWrites=true&w=majority")
 
 mydb = myclient["treasuretracker"]
 mycol = mydb["map"]
 
-mydict = {"room": "Hall"}
-
-# x = mycol.insert_one(mydict)direction
-
-for x in mycol.find():
-    print(x)
-
-dblist = myclient.list_database_names()
-if "treasuretracker" in dblist:
-    print("The database exists.")
-
-collist = mydb.list_collection_names()
-if "map" in collist:
-    print("The collection exists.")
-
-# map = [
-#     {
-#         0: {
-#             "room_id": 0,
-#             "title": "Room 0",
-#             "description": "You are standing in an empty room.",
-#             "coordinates": "(60,60)",
-#             "players": [],
-#             "items": ["small treasure"],
-#             "exits": ["n", "s", "e", "w"],
-#             "cooldown": 60.0,
-#             "errors": [],
-#             "messages": []
-#         }
-#     }
-# ]
 
 # Map ---------------------------------------------------
 @app.route("/", methods=['GET'])
 def index():
     return "API Running"
+
+# TODO: make this work for multiple players in the url 
+@app.route("/player1", methods=['GET'])
+def create_player():
+    # ======== Creating Map ========= #
+    player1.graph.initialize()
+    return "API Running"
+
+# TODO: make this work for multiple players based on the url
+@app.route("/player1/dungeon_crawl", methods=['GET'])
+def dungeon_crawl():
+    # ======== auto run player through map ========= #
+   pass 
 
 
 @app.route('/map', methods=['GET'])
@@ -70,25 +66,28 @@ def get_map():
 def move_player():
     # send request to lambda server with direction
     direction = request.get_json()['direction']
-    print("DIRECTION: ", direction)
-    if direction in ['n', 'e', 'w', 's']:
+    # print("DIRECTION: ", direction)
+    if direction in player1.graph.current_room.exits.keys(): # {'n': 63, 's': 70}
+        # Send movement to Lambda Server
         API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/'
         headers = {
             "Authorization": f'token {TOKEN1}'
         }
         data = {'direction': direction}
-        print('DATAAAAAAAAA: ', data)
         r = requests.post(url=API_ENDPOINT, json=data, headers=headers)
-        returned_data = json.loads(r.text)
-        print(returned_data)
+        # room data
+        print("RESPONSE: ", r)
+        room = json.loads(r.text)
+        print("LOOK FOR THIS ONE: ", room)
+        # Send room data to graph
+        player1.graph.update_map(room, direction)
         # if response is good send info to frontend
         response = {
-            "data": returned_data,
+            "data": room,
         }
-
         return jsonify(response), 200
     else:
-        response = {"message": "Error"}
+        response = {"message": f"Can't go {direction}"}
         return jsonify(response), 400
 
 
