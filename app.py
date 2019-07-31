@@ -89,7 +89,9 @@ def move_player():
         }
         return jsonify(response), 200
     else:
-        response = {"message": f"Can't go {direction}"}
+        # raise TypeError
+        print("ERROR Direction: ", direction)
+        response = {"data": f"Can't go {direction}"}
         return jsonify(response), 400
 
 
