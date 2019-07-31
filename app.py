@@ -84,6 +84,7 @@ def move_player():
         player1.graph.update_map(room, direction)
         # if response is good send info to frontend
         room['adjacent_rooms'] = player1.graph.current_room.exits
+        room['message'] = "Movement Good"
         response = {
             "data": room,
         }
@@ -91,7 +92,9 @@ def move_player():
     else:
         # raise TypeError
         print("ERROR Direction: ", direction)
-        response = {"data": f"Can't go {direction}"}
+        # response = {"data": f"Can't go {direction}"}
+        response = {}
+        response['data'] = {"message": f"Error: Can't go in that direction"}
         return jsonify(response), 400
 
 
