@@ -67,8 +67,9 @@ def get_map():
 def move_player():
     # send request to lambda server with direction
     direction = request.get_json()['direction']
-    # print("DIRECTION: ", direction)
+    print("step1 get direction from frontend: ", direction)
     if direction in player1.graph.current_room.exits.keys(): # {'n': 63, 's': 70}
+        print("step2 if check line 71: ", True)
         # Send movement to Lambda Server
         API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/'
         headers = {
