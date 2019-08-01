@@ -51,11 +51,32 @@ def create_player():
     player1.graph.initialize()
     return "API Running"
 
-# TODO: make this work for multiple players based on the url
-@app.route("/player1/dungeon_crawl", methods=['GET'])
-def dungeon_crawl():
-    # ======== auto run player through map ========= #
-   pass 
+# # TODO: make this work for multiple players based on the url
+# @app.route("/player1/dungeon_crawl", methods=['GET'])
+# def dungeon_crawl():
+#     # ======== auto run player through map ========= #
+#     crawl = True
+#     count = 0
+#     # cooldown timer
+#     cooldown = 0
+
+#     while crawl:
+#         print(count)
+#         if count > 5:
+#             crawl = False
+#         count += 1
+#         # move player
+#         # check cooldown
+#         # set timeout
+#         # check for items at location
+#         # print items at location
+#         # if items:
+#             # loop through items
+#                 # pickup item
+#         # if over encombered   # STRETCH
+#             # drop items until not over encumbered
+#         # 
+
 
 
 @app.route('/map', methods=['GET'])
@@ -89,7 +110,31 @@ def move_player():
         response = {
             "data": room,
         }
-        return jsonify(response), 200
+        return jsonify(response), 200# TODO: make this work for multiple players based on the url
+# @app.route("/player1/dungeon_crawl", methods=['GET'])
+# def dungeon_crawl():
+#     # ======== auto run player through map ========= #
+#     crawl = True
+#     count = 0
+#     # cooldown timer
+#     cooldown = 0
+
+#     while crawl:
+#         print(count)
+#         if count > 5:
+#             crawl = False
+#         count += 1
+#         # move player
+#         # check cooldown
+#         # set timeout
+#         # check for items at location
+#         # print items at location
+#         # if items:
+#             # loop through items
+#                 # pickup item
+#         # if over encombered   # STRETCH
+#             # drop items until not over encumbered
+#         # 
     else:
         # raise TypeError
         print("ERROR Direction: ", direction)
@@ -120,7 +165,7 @@ def take_item():
     return jsonify(response), 200
 
 # @app.route('/drop')
-@app.route('/take', methods=["POST"])
+@app.route('/drop', methods=["POST"])
 def drop_item():
     name = request.get_json()['name']
     API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/drop/'
@@ -205,7 +250,7 @@ def name_change():
     headers = {
         "Authorization": f'token {TOKEN1}'
     }
-    data = {'name': name}
+    data = {'name': name, 'confirm': "aye"}
     print('Name: ', data)
     r = requests.post(url=API_ENDPOINT, json=data, headers=headers)
     returned_data = json.loads(r.text)
@@ -269,3 +314,10 @@ def fly():
 #   return '', 204
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+# MVP
+# Collect 1000 gold
+# traverse the map
+# Find Pirate Ray and change your name
+# Mine at least one Lambda Coin
