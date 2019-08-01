@@ -14,13 +14,8 @@ TOKEN1 = os.getenv('TOKEN1')
 MONGO_USER1 = os.getenv('MONGO_USER1')
 MONGO_PW1 = os.getenv('MONGO_PW1')
 
-TOKEN2 = os.getenv('TOKEN2')
-MONGO_USER2 = os.getenv('MONGO_USER2')
-MONGO_PW2 = os.getenv('MONGO_PW2')
-
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
 
 class Player:
     def __init__(self, token, user, pw):
@@ -32,10 +27,8 @@ class Player:
         self.pw = pw
         self.graph = Graph()
 
-
 # CREATE PLAYER
 player1 = Player(TOKEN1, MONGO_USER1, MONGO_PW1)
-player2 = Player(TOKEN2, MONGO_USER2, MONGO_PW2)
 player1.graph.initialize()
 
 # ======== MongoDB Setup ========= #
@@ -50,21 +43,6 @@ mycol = mydb["map"]
 @app.route("/", methods=['GET'])
 def index():
     return "API Running"
-
-
-@app.route("/get_balance", methods=['GET'])
-def balance():
-    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/bc/get_balance/'
-    headers = {
-        "Authorization": f'token {TOKEN1}'
-    }
-
-    r = requests.get(url=API_ENDPOINT, headers=headers)
-    returned_data = json.loads(r.text)
-    response = {
-        "data": returned_data,
-    }
-    return jsonify(response), 200
 
 # TODO: make this work for multiple players in the url
 @app.route("/player1", methods=['GET'])
@@ -100,6 +78,7 @@ def create_player():
 #         #
 
 
+
 @app.route('/map', methods=['GET'])
 def get_map():
     return jsonify(map)
@@ -110,8 +89,7 @@ def move_player():
     # send request to lambda server with direction
     direction = request.get_json()['direction']
     print("step1 get direction from frontend: ", direction)
-    # {'n': 63, 's': 70}
-    if direction in player1.graph.current_room.exits.keys():
+    if direction in player1.graph.current_room.exits.keys(): # {'n': 63, 's': 70}
         print("step2 if check line 71: ", True)
         # Send movement to Lambda Server
         API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/'
@@ -132,8 +110,7 @@ def move_player():
         response = {
             "data": room,
         }
-        # TODO: make this work for multiple players based on the url
-        return jsonify(response), 200
+        return jsonify(response), 200# TODO: make this work for multiple players based on the url
 # @app.route("/player1/dungeon_crawl", methods=['GET'])
 # def dungeon_crawl():
 #     # ======== auto run player through map ========= #
@@ -207,7 +184,7 @@ def drop_item():
 
     return jsonify(response), 200
 
-# @app.route('/sell')====================================================================
+# @app.route('/sell')
 @app.route('/sell', methods=["POST"])
 def sell_item():
     name = request.get_json()['name']
@@ -227,7 +204,7 @@ def sell_item():
 
     return jsonify(response), 200
 
-# @app.route('/status')====================================================================
+# @app.route('/status')
 @app.route('/status', methods=["POST"])
 def check_status():
     API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/status/'
@@ -245,7 +222,7 @@ def check_status():
 
     return jsonify(response), 200
 
-# @app.route('/examine')====================================================================
+# @app.route('/examine')
 @app.route('/examine', methods=["POST"])
 def examine():
     name = request.get_json()['name']
@@ -265,7 +242,7 @@ def examine():
 
     return jsonify(response), 200
 
-# @app.route('/change_name')====================================================================
+# @app.route('/change_name')
 @app.route('/change_name', methods=["POST"])
 def name_change():
     name = request.get_json()['name']
@@ -285,7 +262,7 @@ def name_change():
 
     return jsonify(response), 200
 
-# @app.route('/pray')====================================================================
+# @app.route('/pray')
 @app.route('/pray', methods=["POST"])
 def pray():
     API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/pray/'
@@ -303,7 +280,7 @@ def pray():
     return jsonify(response), 200
 
 
-# @app.route('/fly')====================================================================
+# @app.route('/fly')
 @app.route('/fly', methods=["POST"])
 def fly():
     # send request to lambda server with direction
@@ -330,14 +307,26 @@ def fly():
         return jsonify(response), 400
 
 
-# Players====================================================================
+@app.route("/get_balance", methods=['GET'])
+def balance():
+    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/bc/get_balance/'
+    headers = {
+        "Authorization": f'token {TOKEN1}'
+    }
 
+    r = requests.get(url=API_ENDPOINT, headers=headers)
+    returned_data = json.loads(r.text)
+    response = {
+        "data": returned_data,
+    }
+    return jsonify(response), 200
+
+
+# Players ---------------------------------------------------
 # @app.route('/players', methods=['POST'])
 # def add_income():
 #   incomes.append(request.get_json())
 #   return '', 204
-
-
 if __name__ == "__main__":
     app.run(debug=True)
 
