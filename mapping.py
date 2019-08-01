@@ -163,4 +163,4 @@ if __name__ == '__main__':
             if 'w' in data[room][1]:
                 graph.add_edge(room, str(data[room][1]['w']))
         # print(graph.vertices)
-print(graph.bfs('100', '467'))
+print(graph.bfs('164', '467'))
