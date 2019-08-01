@@ -29,6 +29,7 @@ class Player:
 
 # CREATE PLAYER
 player1 = Player(TOKEN1, MONGO_USER1, MONGO_PW1)
+player1.graph.initialize()
 
 # ======== MongoDB Setup ========= #
 myclient = pymongo.MongoClient(
@@ -66,8 +67,9 @@ def get_map():
 def move_player():
     # send request to lambda server with direction
     direction = request.get_json()['direction']
-    # print("DIRECTION: ", direction)
+    print("step1 get direction from frontend: ", direction)
     if direction in player1.graph.current_room.exits.keys(): # {'n': 63, 's': 70}
+        print("step2 if check line 71: ", True)
         # Send movement to Lambda Server
         API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/'
         headers = {
@@ -82,12 +84,18 @@ def move_player():
         # Send room data to graph
         player1.graph.update_map(room, direction)
         # if response is good send info to frontend
+        room['adjacent_rooms'] = player1.graph.current_room.exits
+        room['message'] = "Movement Good"
         response = {
             "data": room,
         }
         return jsonify(response), 200
     else:
-        response = {"message": f"Can't go {direction}"}
+        # raise TypeError
+        print("ERROR Direction: ", direction)
+        # response = {"data": f"Can't go {direction}"}
+        response = {}
+        response['data'] = {"message": f"Error: Can't go in that direction"}
         return jsonify(response), 400
 
 

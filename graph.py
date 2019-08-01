@@ -100,6 +100,9 @@ class Graph:
                 self.current_room.exits[opp_direction] = self.prev_room.id
                 print("CURRENT ROOM EXITS: ", self.current_room.exits)
                 print("PREV ROOM EXITS: ", self.prev_room.exits)
+            else:                                                               # If room has already been visited
+                self.prev_room = self.current_room
+                self.current_room = self.map[id]
 
 
 
