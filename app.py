@@ -14,6 +14,10 @@ TOKEN1 = os.getenv('TOKEN1')
 MONGO_USER1 = os.getenv('MONGO_USER1')
 MONGO_PW1 = os.getenv('MONGO_PW1')
 
+TOKEN2 = os.getenv('TOKEN2')
+MONGO_USER2 = os.getenv('MONGO_USER2')
+MONGO_PW2 = os.getenv('MONGO_PW2')
+
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -44,18 +48,39 @@ mycol = mydb["map"]
 def index():
     return "API Running"
 
-# TODO: make this work for multiple players in the url 
+# TODO: make this work for multiple players in the url
 @app.route("/player1", methods=['GET'])
 def create_player():
     # ======== Creating Map ========= #
     player1.graph.initialize()
     return "API Running"
 
-# TODO: make this work for multiple players based on the url
-@app.route("/player1/dungeon_crawl", methods=['GET'])
-def dungeon_crawl():
-    # ======== auto run player through map ========= #
-   pass 
+# # TODO: make this work for multiple players based on the url
+# @app.route("/player1/dungeon_crawl", methods=['GET'])
+# def dungeon_crawl():
+#     # ======== auto run player through map ========= #
+#     crawl = True
+#     count = 0
+#     # cooldown timer
+#     cooldown = 0
+
+#     while crawl:
+#         print(count)
+#         if count > 5:
+#             crawl = False
+#         count += 1
+#         # move player
+#         # check cooldown
+#         # set timeout
+#         # check for items at location
+#         # print items at location
+#         # if items:
+#             # loop through items
+#                 # pickup item
+#         # if over encombered   # STRETCH
+#             # drop items until not over encumbered
+#         #
+
 
 
 @app.route('/map', methods=['GET'])
@@ -89,7 +114,31 @@ def move_player():
         response = {
             "data": room,
         }
-        return jsonify(response), 200
+        return jsonify(response), 200# TODO: make this work for multiple players based on the url
+# @app.route("/player1/dungeon_crawl", methods=['GET'])
+# def dungeon_crawl():
+#     # ======== auto run player through map ========= #
+#     crawl = True
+#     count = 0
+#     # cooldown timer
+#     cooldown = 0
+
+#     while crawl:
+#         print(count)
+#         if count > 5:
+#             crawl = False
+#         count += 1
+#         # move player
+#         # check cooldown
+#         # set timeout
+#         # check for items at location
+#         # print items at location
+#         # if items:
+#             # loop through items
+#                 # pickup item
+#         # if over encombered   # STRETCH
+#             # drop items until not over encumbered
+#         #
     else:
         # raise TypeError
         print("ERROR Direction: ", direction)
@@ -119,7 +168,7 @@ def take_item():
 
     return jsonify(response), 200
 
-# @app.route('/drop')====================================================================
+# @app.route('/drop')
 @app.route('/drop', methods=["POST"])
 def drop_item():
     name = request.get_json()['name']
@@ -205,7 +254,7 @@ def name_change():
     headers = {
         "Authorization": f'token {TOKEN1}'
     }
-    data = {'name': name}
+    data = {'name': name, 'confirm': "aye"}
     print('Name: ', data)
     r = requests.post(url=API_ENDPOINT, json=data, headers=headers)
     returned_data = json.loads(r.text)
@@ -272,3 +321,10 @@ def fly():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+# MVP
+# Collect 1000 gold
+# traverse the map
+# Find Pirate Ray and change your name
+# Mine at least one Lambda Coin
