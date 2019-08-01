@@ -21,6 +21,7 @@ MONGO_PW2 = os.getenv('MONGO_PW2')
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
+
 class Player:
     def __init__(self, token, user, pw):
         self.items = []
@@ -31,8 +32,10 @@ class Player:
         self.pw = pw
         self.graph = Graph()
 
+
 # CREATE PLAYER
 player1 = Player(TOKEN1, MONGO_USER1, MONGO_PW1)
+player2 = Player(TOKEN2, MONGO_USER2, MONGO_PW2)
 player1.graph.initialize()
 
 # ======== MongoDB Setup ========= #
@@ -47,6 +50,21 @@ mycol = mydb["map"]
 @app.route("/", methods=['GET'])
 def index():
     return "API Running"
+
+
+@app.route("/get_balance", methods=['GET'])
+def balance():
+    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/bc/get_balance/'
+    headers = {
+        "Authorization": f'token {TOKEN1}'
+    }
+
+    r = requests.get(url=API_ENDPOINT, headers=headers)
+    returned_data = json.loads(r.text)
+    response = {
+        "data": returned_data,
+    }
+    return jsonify(response), 200
 
 # TODO: make this work for multiple players in the url
 @app.route("/player1", methods=['GET'])
@@ -82,7 +100,6 @@ def create_player():
 #         #
 
 
-
 @app.route('/map', methods=['GET'])
 def get_map():
     return jsonify(map)
@@ -93,7 +110,8 @@ def move_player():
     # send request to lambda server with direction
     direction = request.get_json()['direction']
     print("step1 get direction from frontend: ", direction)
-    if direction in player1.graph.current_room.exits.keys(): # {'n': 63, 's': 70}
+    # {'n': 63, 's': 70}
+    if direction in player1.graph.current_room.exits.keys():
         print("step2 if check line 71: ", True)
         # Send movement to Lambda Server
         API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/move/'
@@ -114,7 +132,8 @@ def move_player():
         response = {
             "data": room,
         }
-        return jsonify(response), 200# TODO: make this work for multiple players based on the url
+        # TODO: make this work for multiple players based on the url
+        return jsonify(response), 200
 # @app.route("/player1/dungeon_crawl", methods=['GET'])
 # def dungeon_crawl():
 #     # ======== auto run player through map ========= #
