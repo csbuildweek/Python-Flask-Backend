@@ -25,7 +25,9 @@ class Miner:
         headers = {"Authorization": f'token {TOKEN1}'}
         r = requests.get(url=API_ENDPOINT, headers=headers)
         last_proof = json.loads(r.text)
-        self.last_proof = last_proof['proof'] 
+        print("LAST PROOF: ", last_proof)
+        self.last_proof = last_proof['proof']
+        self.proof = last_proof['proof']
         self.difficulty = last_proof['difficulty'] 
         self.cooldown = last_proof['cooldown']
 
@@ -34,7 +36,7 @@ class Miner:
         print("Searching for next proof")
         self.proof = 0
         while self.valid_proof() is False:
-            self.proof = random.randint(1,10000000000)
+            self.proof = random.randint(self.proof - 1000000000000, self.proof + 10000000000000)
         print(f"Proof found: {self.proof}")
         
         return self.proof
@@ -53,8 +55,8 @@ while True:
     time.sleep(miner.cooldown)
     miner.proof_of_work()
     # send found proof to lambda server
-    headers = {"Authorization": f'token {TOKEN1}'}
+    headers = {"Authorization": 'Token 9a7bff2905601b94f7900f314cb4d4c930bbe025'}
     r = requests.post(url="https://lambda-treasure-hunt.herokuapp.com/api/bc/mine/", json={"proof": f"{miner.proof}"}, headers=headers)
-    response = json.loads(r.text)
-    print(response)
+    response = json.dumps(r.text)
+    print(response['cooldown'])
     time.sleep(miner.cooldown)
