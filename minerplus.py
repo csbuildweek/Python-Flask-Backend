@@ -34,9 +34,9 @@ class Miner:
 
     def proof_of_work(self):
         print("Searching for next proof")
-        self.proof = 0
+        self.proof = self.last_proof
         while self.valid_proof() is False:
-            self.proof = random.randint(self.proof - 1000000000000, self.proof + 10000000000000)
+            self.proof += 1
         print(f"Proof found: {self.proof}")
         
         return self.proof
