@@ -77,12 +77,6 @@ def create_player():
 #             # drop items until not over encumbered
 #         #
 
-
-
-@app.route('/map', methods=['GET'])
-def get_map():
-    return jsonify(map)
-
 # @app.route('/move')
 @app.route('/move', methods=["POST"])
 def move_player():
