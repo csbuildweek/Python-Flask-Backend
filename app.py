@@ -44,7 +44,7 @@ mycol = mydb["map"]
 def index():
     return "API Running"
 
-# TODO: make this work for multiple players in the url 
+# TODO: make this work for multiple players in the url
 @app.route("/player1", methods=['GET'])
 def create_player():
     # ======== Creating Map ========= #
@@ -75,13 +75,7 @@ def create_player():
 #                 # pickup item
 #         # if over encombered   # STRETCH
 #             # drop items until not over encumbered
-#         # 
-
-
-
-@app.route('/map', methods=['GET'])
-def get_map():
-    return jsonify(map)
+#         #
 
 # @app.route('/move')
 @app.route('/move', methods=["POST"])
@@ -134,7 +128,7 @@ def move_player():
 #                 # pickup item
 #         # if over encombered   # STRETCH
 #             # drop items until not over encumbered
-#         # 
+#         #
     else:
         # raise TypeError
         print("ERROR Direction: ", direction)
@@ -305,6 +299,21 @@ def fly():
     else:
         response = {"message": "Error"}
         return jsonify(response), 400
+
+
+@app.route("/get_balance", methods=['GET'])
+def balance():
+    API_ENDPOINT = 'https://lambda-treasure-hunt.herokuapp.com/api/bc/get_balance/'
+    headers = {
+        "Authorization": f'token {TOKEN1}'
+    }
+
+    r = requests.get(url=API_ENDPOINT, headers=headers)
+    returned_data = json.loads(r.text)
+    response = {
+        "data": returned_data,
+    }
+    return jsonify(response), 200
 
 
 # Players ---------------------------------------------------
